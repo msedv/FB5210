@@ -7,7 +7,6 @@ b. Zugriff auf den LON-Bus an der Heizung, siehe z.B. <https://www.g3gg0.de/word
 c. Zugriff auf die Kommunikation zwischen den Bedienmodulen und der Heizungszentrale
 
 Die dritte Variante hat mir schon immer recht gut gefallen, da damit der Eingriff ins System minimal ist; bereits 2019 hat der User Mischak unter <https://www.haustechnikdialog.de/Forum/t/99932/Welcher-Bus-bei-FB-5210-Windhager> die Rahmenparameter dazu gepostet:
-
 # Interface Windhager MES Bedienmodul FB 5210
 
 Zwischen Bedienmodulen und Heizungszentrale wird eine 2-Draht-Schnittstelle mit 10-12V Spannung verwendet auf der tatsächlich nur ein RS232-Protokoll mit 4800 Baud und 8N1 gefahren wird. Der Zugriff ist trivial: Spannungsteiler mit z.B. 15/39k (siehe <https://www.aeq-web.com/spannungsteiler-microcontroller-berechnen-und-dimensionieren/>) oder gleich einen Optokoppler um auf Mikrocontroller-taugliche 3-3,3V zu kommen, dann:
@@ -51,12 +50,39 @@ Siehe Source.
 
 # Testdaten
 
-Ebenfalls im Repository zwei Testdumps meiner beiden Heizkreise; was ich recht gerne mache ist auch zu checken was in beiden Protokollen an identischen Daten vorhanden ist:
+Ebenfalls im Repository zwei Testdumps meiner beiden Heizkreise; so sieht man ein sortierte Liste der Pakete ohne Dupikate:
+```
+grep -v "\*\*\*\|Ungültiger\|Starte" dump1.txt | sort -u
+grep -v "\*\*\*\|Ungültiger\|Starte" dump2.txt | sort -u
+```
+Was ich recht gerne mache ist auch zu checken was in beiden Protokollen an identischen Daten vorhanden ist:
 
 ```
 comm -12 <( grep -v "\*\*\*\|Ungültiger\|Starte" dump1.txt | sort -u ) <( grep -v "\*\*\*\|Ungültiger\|Starte" dump2.txt | sort -u )
 ```
-
+Das ergibt beispielsweise für die beiden Dumps:
+```
+91007f030203050400
+91007f030203050e00
+92007f03026708020402646401
+92007f03026708020433646401
+92007f03026708020434646401
+92007f03026708020441646401
+92007f03026708020442646401
+92007f03026708020443646401
+92007f03026708020450646401
+92007f0302670803050202646400
+92007f0302670803053333646400
+92007f0302670803053434646400
+92007f0302670803054141646400
+92007f0302670803054242646400
+92007f0302670803054343646400
+92007f0302670803055050646401
+92007f030277070400
+92007f030277070e00
+92057f030277072100 ASK_RAUM
+9b7f050283e700
+```
 # Conclusio
 
 Also, wer auch immer etwas beitragen kann - **bitte** her damit! :-)
